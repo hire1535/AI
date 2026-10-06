@@ -6,7 +6,6 @@ print("Distributive Law of Addition")
 
 left = a * (b + c)
 right = (a * b) + (a * c)
-
 print("a * (b + c) =", left)
 print("(a * b) + (a * c) =", right)
 
