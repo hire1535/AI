@@ -1,5 +1,29 @@
 import heapq
 
+def calculate_heuristic(graph, goal):
+    heuristic = {}
+    priority_queue = [(0, goal)]
+    visited = set()
+
+    while priority_queue:
+        cost, current = heapq.heappop(priority_queue)
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+        heuristic[current] = cost
+
+        for neighbor, edge_cost in graph[current]:
+            if neighbor not in visited:
+                heapq.heappush(
+                    priority_queue,
+                    (cost + edge_cost, neighbor)
+                )
+
+    return heuristic
+
+
 def a_star(graph, heuristic, start, goal):
     open_list = []
     heapq.heappush(open_list, (0, start))
@@ -45,16 +69,10 @@ graph = {
     "E": [("D", 3)]
 }
 
-heuristic = {
-    "A": 7,
-    "B": 6,
-    "C": 4,
-    "D": 3,
-    "E": 0
-}
-
 start = "A"
 goal = "E"
+
+heuristic = calculate_heuristic(graph, goal)
 
 path, cost = a_star(graph, heuristic, start, goal)
 

@@ -1,5 +1,30 @@
 import heapq
 
+def calculate_heuristic(graph, goal):
+    heuristic = {}
+    priority_queue = [(0, goal)]
+    visited = set()
+
+    while priority_queue:
+        cost, current = heapq.heappop(priority_queue)
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+        heuristic[current] = cost
+
+        for node in graph:
+            if current in graph[node] and node not in visited:
+                heapq.heappush(priority_queue, (cost + 1, node))
+
+    for node in graph:
+        if node not in heuristic:
+            heuristic[node] = float("inf")
+
+    return heuristic
+
+
 def greedy_best_first_search(graph, heuristic, start, goal):
     priority_queue = [(heuristic[start], start)]
     visited = set()
@@ -44,18 +69,10 @@ graph = {
     "G": []
 }
 
-heuristic = {
-    "A": 7,
-    "B": 6,
-    "C": 4,
-    "D": 5,
-    "E": 2,
-    "F": 3,
-    "G": 0
-}
-
 start = "A"
 goal = "G"
+
+heuristic = calculate_heuristic(graph, goal)
 
 path = greedy_best_first_search(graph, heuristic, start, goal)
 
